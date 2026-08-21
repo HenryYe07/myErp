@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# VSCode temporary files
+tempCodeRunnerFile.js
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# build output
+dist/
+
+# uploaded files
+public/upload/
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
