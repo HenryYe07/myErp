@@ -172,6 +172,7 @@
     const tip_dialog = ref("")
     const all_comments = ref([])
     
+    // 根据审批的id，从后端获取审批，然后渲染出来
     async function rendApr(){node_now.value = 0
         is_show.value=true
         result.value = await fetch(`/api/approval?id=${props.approvalID}`).then((res)=>{return res.json()})
@@ -237,10 +238,12 @@
 
                 tip_dialog.value = "操作成功"
                 dialog_visible.value = true
+                rendApr()
             }
             else{
                 tip_dialog.value = "操作失败，目前不在您的流程"
                 dialog_visible.value = true
+                rendApr()
             }
         })
     }
@@ -262,10 +265,12 @@
 
                 tip_dialog.value = "操作成功"
                 dialog_visible.value = true
+                rendApr()
             }
             else{
                 tip_dialog.value = "操作失败，目前不在您的流程"
                 dialog_visible.value = true
+                rendApr()
             }
         })
     }
@@ -287,10 +292,12 @@
 
                 tip_dialog.value = "撤回成功"
                 dialog_visible.value = true
+                rendApr()
             }
             else{
                 tip_dialog.value = `操作失败，这不是您的审批或者审批已经有了结果${res.status}`
                 dialog_visible.value = true
+                rendApr()
             }
         })
     }
