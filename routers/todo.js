@@ -34,4 +34,30 @@ router.post("/",(request,response)=>{
     })
 })
 
+router.patch("/",(request,response)=>{
+    const memberList = []
+    memberList.push({
+        userID:request.userID,
+        attitude:"creator"
+    })
+    request.body.memList.forEach((item)=>{
+        memberList.push({
+            userID:item,
+            attitude:"waiting"
+            
+        })
+    })
+    todoModel.update({
+        _id:request.body.id
+    },{
+        content: request.body.content,
+        startTime: String(new Date(request.body.startTime)),
+        endTime: String(new Date(request.body.endTime)),
+        member: memberList
+    }).then(()=>{
+        response.status(200).send("created")
+    })
+})
+
+
 module.exports = router
