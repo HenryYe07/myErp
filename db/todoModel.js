@@ -3,7 +3,8 @@ const schema = new mongoose.Schema({
     content: String,
     startTime: String,
     endTime: String,
-    member: Array
+    member: Array,
+    creatorID: String
 })
 
 const model = mongoose.model('todo',schema)
