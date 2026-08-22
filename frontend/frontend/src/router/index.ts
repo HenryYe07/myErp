@@ -15,6 +15,10 @@ import orderPage from '@/views/workspace/orderPage.vue'
 import todoPage from '@/views/workspace/todoPage.vue'
 import welcomePage from '@/views/workspace/welcomePage.vue'
 
+import dayTodo from '@/views/todoOperation/dayTodo.vue'
+import invitationTodo from '@/views/todoOperation/invitationTodo.vue'
+import newTodo from '@/views/todoOperation/newTodo.vue'
+
 // 创建一个路由器 要传入一个配置项
 const router = createRouter({
     history:createWebHashHistory(),  // 路由器的工作模式，后面会讲
@@ -37,7 +41,15 @@ const router = createRouter({
             {path:'management',component:managementPage},
             {path:'message',component:messagePage},
             {path:'order',component:orderPage},
-            {path:'todo',component:todoPage},
+            {
+                path:'todo',
+                component:todoPage,
+                children:[
+                   {path:"newTodo",component:newTodo},
+                   {path:"invitationTodo",component:invitationTodo},
+                   {path:"dayTodo",component:dayTodo},
+                ]
+            },
             {path:'welcome',component:welcomePage}
         ]
     },

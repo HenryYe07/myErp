@@ -15,7 +15,8 @@
     }
 
 .outer {
-    width: 100%;
+    width: 100vw;
+    box-sizing: border-box;
     height: 50px;
     background-color: rgba(0, 0, 0, 0.746);
     color:aliceblue;

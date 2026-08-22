@@ -173,4 +173,19 @@ router.get("/confirm", async (request, response) => {
     response.status(200).json(result)
 })
 
+// 等我操作
+router.get("/waiting", async (request, response) => {
+    const result = await todoModel.find({
+        member: {
+            $elemMatch: {
+                userID: request.userID,
+                attitude: "waiting"
+            }
+        }
+    })
+
+    response.status(200).json(result)
+})
+
+
 module.exports = router
