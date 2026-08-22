@@ -47,6 +47,9 @@ server.get('/',(request,response)=>{
     response.send("OK")
 })
 
+// 引入todo模块
+const todo= require("./routers/todo.js")
+server.use('/api/todo',auth_MW,todo)
 
 
 server.get('/testPermission',auth_MW,permission_Verify_MW("display.view"),(request,response)=>{
