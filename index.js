@@ -6,9 +6,6 @@ mongoose.connect("mongodb://localhost:27017/myErpDB").then(()=>{
 })
 const server = express()
 
-// 加入根据名字获取id模块
-const getUserInfobyUserName = require('./modules/getUserID')
-
 // 给body添加json解析
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()

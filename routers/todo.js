@@ -5,7 +5,7 @@ const path = require("path")
 const userModel = require("../db/userModel")
 const jwt = require('jsonwebtoken')
 const { group } = require('console')
-const getIDbyUserName = require('../modules/getUserID')
+const getIDbyUserName = require('../modules/getUsername_id_tool')
 
 const serverKey = 'oooooiiiskskkkskks12348765'
 
@@ -82,6 +82,7 @@ router.get("/mine",async(request,response)=>{
     response.status(200).json(await todoModel.find({"creatorID":request.userID}))
 })
 
+let { getUsernameByID } = require('../modules/getUsername_id_tool.js')
 // 获取别人的 只能获取到时间
 router.get("/others", async (request, response) => {
     const todoList = await todoModel.find({
@@ -91,7 +92,12 @@ router.get("/others", async (request, response) => {
                 attitude: "accept"
             }
         }
-    }).select("-content -member")
+    })
+
+    todoList.forEach(todo=>{
+        todo.content = getUsernameByID(request.query.id)
+        todo.member = ""
+    })
     response.status(200).json(todoList)
 })
 
@@ -167,6 +173,20 @@ router.get("/confirm", async (request, response) => {
             $elemMatch: {
                 userID: request.userID,
                 attitude: "accept"
+            }
+        }
+    })
+    response.status(200).json(result)
+})
+
+
+// 获取所有我已经拒绝的 Todo
+router.get("/iRejected", async (request, response) => {
+    const result = await todoModel.find({
+        member: {
+            $elemMatch: {
+                userID: request.userID,
+                attitude: "reject"
             }
         }
     })

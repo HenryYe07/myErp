@@ -37,17 +37,17 @@
 .chooseVisualOuter{
     width: 200px;
     height: calc(100vh - 50px);
-    background-color: rgba(240, 248, 255, 0.095);
+    background-color: rgba(0, 0, 0, 0.066);
 }
 
 .calendarOuter{
-    background-color: rgba(240, 248, 255, 0.252);
-    width: calc(100vw - 350px - 200px - 230px);
+    background-color: rgba(30, 30, 30, 0.2);
+    width: calc(100vw - 300px - 200px - 230px);
 }
 .operationsOuter {
-    width: 350px;
+    width: 300px;
     height: calc(100vh - 50px);
-    background-color: rgba(240, 248, 255, 0.073);
+    background-color: rgba(11, 11, 11, 0.233);
     
 }
 

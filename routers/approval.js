@@ -5,7 +5,7 @@ const path = require("path")
 const userModel = require("../db/userModel")
 const jwt = require('jsonwebtoken')
 const { group } = require('console')
-const getID = require('../modules/getUserID')
+const {getID} = require('../modules/getUsername_id_tool')
 const mongoose = require('mongoose')
 // 登陆状态检测和权限控制的中间件
 const auth_MW = require("../middleware/auth") // 直接auth_MW 使用

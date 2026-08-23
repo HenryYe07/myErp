@@ -5,7 +5,7 @@ const path = require("path")
 const userModel = require("../db/userModel")
 const jwt = require('jsonwebtoken')
 const { group } = require('console')
-const getIDbyUserName = require('../modules/getUserID')
+
 
 const auth_MW = require("../middleware/auth") // 直接auth_MW 使用
 
