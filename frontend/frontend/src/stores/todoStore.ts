@@ -6,23 +6,16 @@ export const use_todoStore = defineStore('todoStore',{
         return{
             findingUserID:"",
             appendIDlist:[],
-            showingTODOlist:[]
+            showingTODOlist:[],
+            selected_date:""
         }
     },
 
     actions:{
         appendTODOlist(appending_list){
             for(const todo of appending_list){
-                const index = this.showingTODOlist.findIndex(item => item._id == todo._id)
-                if(index === -1){
-                    // 没有，就添加
-                    this.showingTODOlist.push(todo)
-                }else{
-                    // 已经有了，就覆盖
-                    this.showingTODOlist[index] = todo
-                }
+                this.showingTODOlist.push(todo)
             }
-    
-}
+        }
     }
 })

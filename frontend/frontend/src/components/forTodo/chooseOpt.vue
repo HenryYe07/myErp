@@ -1,8 +1,8 @@
 <template>
     <div class="outer">
-        <div class="new" @click="newBtn">创建</div>
-        <div class="inviteMe" @click="inviteMeBtn">邀我</div>
-        <div class="findOth" @click="findOthBtn">找人</div>
+        <RouterLink to="/mainWorkPage/todo/newTodo">创建</RouterLink>
+        <RouterLink to="/mainWorkPage/todo/invitationTodo">邀我</RouterLink>
+        <RouterLink to="/mainWorkPage/todo/findingTodo">找人</RouterLink>
     </div>
 </template>
 
@@ -10,15 +10,6 @@
     import { useRouter } from 'vue-router';
     const router = useRouter()
 
-    function newBtn(){
-        router.push("/mainWorkPage/todo/newTodo")
-    }
-    function inviteMeBtn(){
-        router.push("/mainWorkPage/todo/invitationTodo")
-    }
-    function findOthBtn(){
-        router.push("/mainWorkPage/todo/dayTodo")
-    }
 
 </script>
     
@@ -28,15 +19,26 @@
         text-align: center;
         padding: 5px;
         margin: 4px;
+
         background-color: rgba(3, 2, 2, 0.167);
+        box-sizing: border-box;
+        border: .5px rgba(255, 255, 255, 0.451) solid;
+        border-bottom:2px rgba(255, 255, 255, 0.469) solid ;
+
+        color: white;
+        text-decoration: none;
     }
     .outer>*:hover {
         background-color: rgba(2, 1, 1, 0.297);
         cursor: pointer;
+        border: .5px rgba(255, 255, 255, 0.737) solid;
+        border-bottom:2px rgba(255, 255, 255, 0.737) solid ;
     }
-    .outer>*:active {
-        background-color: rgba(243, 243, 243, 0.297);
-        cursor: pointer;
+
+    .outer .router-link-active {
+        background-color: rgba(163, 163, 163, 0.297);
+        border: .5px rgba(255, 255, 255, 0.737) solid;
+        border-bottom:2px rgba(255, 255, 255, 0.737) solid ;
     }
 
 </style>

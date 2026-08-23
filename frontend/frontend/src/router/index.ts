@@ -18,6 +18,8 @@ import welcomePage from '@/views/workspace/welcomePage.vue'
 import dayTodo from '@/views/todoOperation/dayTodo.vue'
 import invitationTodo from '@/views/todoOperation/invitationTodo.vue'
 import newTodo from '@/views/todoOperation/newTodo.vue'
+import findingTodo from '@/views/todoOperation/findingTodo.vue'
+
 
 // 创建一个路由器 要传入一个配置项
 const router = createRouter({
@@ -48,6 +50,7 @@ const router = createRouter({
                    {path:"newTodo",component:newTodo},
                    {path:"invitationTodo",component:invitationTodo},
                    {path:"dayTodo",component:dayTodo},
+                   {path:"findingTodo",component:findingTodo},
                 ]
             },
             {path:'welcome',component:welcomePage}

@@ -83,6 +83,7 @@ router.get("/mine",async(request,response)=>{
 })
 
 let { getUsernameByID } = require('../modules/getUsername_id_tool.js')
+const { request } = require('http')
 // 获取别人的 只能获取到时间
 router.get("/others", async (request, response) => {
     const todoList = await todoModel.find({
@@ -204,6 +205,15 @@ router.get("/waiting", async (request, response) => {
         }
     })
 
+    response.status(200).json(result)
+})
+
+// 获取所有我要别人做的
+router.get("/callOther", async (request, response) => {
+    const result = await todoModel.find({
+        creatorID: request.userID,
+        "member.userID": { $ne: request.userID }
+    })
     response.status(200).json(result)
 })
 
