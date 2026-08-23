@@ -19,7 +19,7 @@ export default defineConfig({
     allowedHosts: ['45.95.212.18'],
         proxy: {
             '/api': {
-                target: 'http://localhost:9000',
+                target: 'http://127.0.0.1:9000',
                 changeOrigin: true
             }
         }
