@@ -7,7 +7,8 @@ export const use_todoStore = defineStore('todoStore',{
             findingUserID:"",
             appendIDlist:[],
             showingTODOlist:[],
-            selected_date:""
+            selected_date:"",
+            refresh:()=>{}
         }
     },
 

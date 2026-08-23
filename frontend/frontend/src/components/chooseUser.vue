@@ -3,7 +3,7 @@
     <div class="outer">
         
         <div class="addedMember">
-            <span class="member" v-for="(item, index) in approvers" :key="index">{{ item.username }}</span>
+            <span class="member" v-for="(item, index) in approvers" :key="index" @click="removeMem(item)">{{ item.username }}</span>
         </div>
 
         <el-input class="findMemIpt" v-model="findingWords" placeholder="张三" />
@@ -63,6 +63,14 @@
             foundUserData.value = res
         })
     }
+
+    function removeMem(item){
+        console.log(item)
+        const index = approvers.value.findIndex(i=> i._id === item._id)
+        if (index !== -1) {
+            approvers.value.splice(index, 1)
+        }       
+    }
 </script>
 
 <style scoped>
@@ -77,6 +85,8 @@
 
     padding: 10px;
     margin: 10px;
+    box-sizing: border-box;
+    width: 98%;
 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 
@@ -88,6 +98,8 @@
     display: inline-block;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
+
+    cursor:pointer;
 }
 .addedMember {
     width: 100%;

@@ -65,7 +65,7 @@
     function changeCnt(){
         console.log(choosedList.value)
         todoStore.showingTODOlist = []
-
+        saveOption()
         for(const item of choosedList.value){
 
             // 我要做的（已经确认了的）
@@ -123,9 +123,13 @@
         }
     }
 
+
+
     function saveOption(){
         localStorage.setItem("show_options",JSON.stringify(show_options.value))
     }
+
+    todoStore.refresh = changeCnt
 
 
 </script>
