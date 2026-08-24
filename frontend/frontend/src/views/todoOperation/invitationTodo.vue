@@ -16,6 +16,10 @@
             <div class="invMember">
                 <span v-for="(memb,index) in item.member" :key="index">{{memb.userName}}</span>
             </div>
+            <div class="operate">
+                <el-button type="success" plain round @click="processInv(item._id,'accept')">接受</el-button>
+                <el-button type="danger" plain round @click="processInv(item._id,'reject')">拒绝</el-button>
+            </div>
         </div>
 
     </div>
@@ -55,6 +59,13 @@
         return time.replace(/ GMT.*$/, "")
     }
 
+    import {postJSON} from '../../modules/fetch'
+    function processInv(id:string,atti:string){
+        postJSON('/api/todo/attitude',{
+            todoID:id,
+            attitude:atti
+        })
+    }
 
     
 </script>
@@ -80,7 +91,7 @@
         font-size: 12px;
     }
     .invMember{
-        float: right;
+        display: flex;
         margin-top: 5px;
     }
     .invMember>*{
@@ -90,6 +101,10 @@
         margin-left: 3px;
         border-radius: 8px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        flex-direction: column-reverse;
+    }
+    .operate {
+        float:right
     }
 
     

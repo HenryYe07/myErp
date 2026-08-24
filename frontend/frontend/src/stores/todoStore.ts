@@ -4,7 +4,7 @@ export const use_todoStore = defineStore('todoStore',{
     // 真正存储数据的地方
     state(){
         return{
-            findingUserID:"",
+            findingUsersID:[],
             appendIDlist:[],
             showingTODOlist:[],
             selected_date:"",

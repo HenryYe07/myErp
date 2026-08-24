@@ -1,12 +1,24 @@
 <template>
     <el-calendar v-model="choosingDay" class="cal" controller-type="select">
         <template #date-cell="{ data }">
-            <div>
+            <div @click="showDay(data)" class="dataCell">
                 <div class="dayNum">{{ data.date.getDate() }}</div>
                 
                 <!-- 在这个地方给每一天塞日程 -->
                 <div v-for="(item,index) in todoStore.showingTODOlist" :key="index">
-                    <div class="todoInDay" v-if="data.day== get_if_Date(item.startTime) ">
+                    <div class="todoInDay" :class="{
+
+                        'todoColor-green': item.type === 'myTodo',
+
+                        'todoColor-blue': item.type === 'waitingCfm',
+
+                        'todoColor-purple': item.type === 'callOther',
+
+                        'todoColor-red': item.type === 'iRejected',
+
+                        'todoColor-yellow': item.type === 'others'
+
+                    }" v-if="data.day == get_if_Date(item.startTime)">
                         {{ item.content }}
                     </div>
                 </div>
@@ -19,6 +31,7 @@
 
 <script lang="ts" setup name="calendar">
 import { ref } from 'vue'
+
 const choosingDay = ref(new Date())
 
 import { use_todoStore } from '@/stores/todoStore';
@@ -26,12 +39,19 @@ const todoStore = use_todoStore()
 
 // 把时间对象的字符串转换成YYYY-MM-DD的格式
 function get_if_Date(date) {
-    console.log(date)
+
     date = new Date(date)
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, "0")
     const day = String(date.getDate()).padStart(2, "0")
     return `${year}-${month}-${day}`
+}
+import {useRouter} from 'vue-router'
+const router = useRouter()
+function showDay(event){
+    console.log("点了一下：",event.date)
+    router.push('/mainWorkPage/todo/dayTodo')
+    todoStore.selected_date = event.date
 }
 </script>
 
@@ -40,8 +60,12 @@ function get_if_Date(date) {
     .cal {
         background-color: rgba(0, 0, 0, 0.302);
         height: calc(100vh - 50px);
+        
 
         
+    }
+    .el-calendar-day {
+        overflow: hidden;
     }
 
     :deep(.el-calendar-table .is-selected) {
@@ -53,6 +77,7 @@ function get_if_Date(date) {
     }
     :deep(.el-calendar-table .el-calendar-day) {
         height: calc((100vh - 50px - 80px - 70px) / 6);
+        overflow: scroll;
         padding: 0;
         
     }
@@ -78,6 +103,7 @@ function get_if_Date(date) {
         padding: 0px 10px 0px 10px;
         border-radius: 10px;
         margin-bottom: 2px;
+
         
     }
 
@@ -112,5 +138,9 @@ function get_if_Date(date) {
 
 .todoColor-black {
     background-color: rgba(20, 20, 20, 0.557);
+}
+
+.dataCell {
+    height: 100%;
 }
 </style>

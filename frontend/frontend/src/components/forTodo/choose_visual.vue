@@ -59,7 +59,7 @@
     ]
     const show_options = ref<Array<Object>>([])
     show_options.value = JSON.parse(localStorage.getItem("show_options") || JSON.stringify(show_options_default))
-
+    choosedList.value = show_options.value.filter((item) => item.is_choosed).map((item) => item.value)
 
     // 读取cnt里的value
     function changeCnt(){
@@ -111,14 +111,17 @@
                 })
             }
 
-            if(item == "finding"){ // 注意这个后续要用pinia传进来在找的人的id
-                fetch(`/api/todo/others?id=${todoStore.findingUserID}`).then(res => res.json()).then((res:Array<Object>)=>{
+            if(item == "finding"){ 
+                for(const fUser of todoStore.findingUsersID){
+                    console.log("人：",fUser)
+                    fetch(`/api/todo/others?id=${fUser._id}`).then(res => res.json()).then((res:Array<Object>)=>{
                     res.forEach((item)=>{
-                        item["type"] = "finding"
+                        item["type"] = "others"
                     })
                     todoStore.appendTODOlist(res)
 
                 })
+                }
             }
         }
     }
@@ -130,6 +133,11 @@
     }
 
     todoStore.refresh = changeCnt
+
+    import { onUnmounted } from 'vue'
+    onUnmounted(()=>{
+        todoStore.showingTODOlist = []
+    })
 
 
 </script>
