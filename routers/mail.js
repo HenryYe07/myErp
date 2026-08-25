@@ -54,11 +54,25 @@ router.post("/",(request,response)=>{
 
     }
     
-    // 存进数据库
-    mailModel.create(mailObj).then(()=>{
-        response.status(200).send('OK')
-        // 这里后面要加 向所有收件人发一个ws刷新
+    // 存进数据库 然后在线的话ws喊一声
+    mailModel.create(mailObj).then(() => {
+    response.status(200).send('OK')
+
+    // 向在线收件人发送新邮件通知
+    wss.clients.forEach((client) => {
+        if (client.readyState !== WebSocket.OPEN) {
+            return
+        }
+
+        const isReceiverOnline = receivers.some((receiver) => {
+            return String(receiver.userID) === String(client.userID)
+        })
+
+        if (isReceiverOnline) {
+            client.send("gotNewMessage")
+        }
     })
+})
     
 })
 
@@ -214,4 +228,57 @@ router.get("/", async (request, response) => {
     }
 })
 
+
+const WebSocket = require("ws")
+
+const wss = new WebSocket.Server({ port: 9090 })
+
+wss.on("connection", async (client, request) => {
+    try {
+        // 从 Cookie 中获取 token
+        const cookie = request.headers.cookie || ""
+
+        const tokenCookie = cookie
+            .split(";")
+            .map(item => item.trim())
+            .find(item => item.startsWith("token="))
+
+        // 没有 token，直接关闭连接
+        if (!tokenCookie) {
+            client.close()
+            return
+        }
+
+        const token = tokenCookie.substring("token=".length)
+
+        // JWT 验证
+        const data = jwt.verify(token, serverKey)
+
+        // 查询用户
+        const db_userinfo = await userModel.findById(data.id)
+
+        // 用户不存在，或者 tokenVersion 不一致
+        if (
+            !db_userinfo ||
+            data.tokenVersion != db_userinfo.tokenVersion
+        ) {
+            client.close()
+            return
+        }
+
+        // 鉴权成功，把用户 ID 放进 client
+        client.userID = String(data.id)
+
+        console.log("WebSocket用户上线", client.userID)
+
+        // 用户断开连接
+        client.on("close", () => {
+            console.log("WebSocket用户下线", client.userID)
+        })
+    }
+    catch (err) {
+        console.error(err)
+        client.close()
+    }
+})
 module.exports = router
