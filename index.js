@@ -49,8 +49,8 @@ const todo = require("./routers/todo.js")
 server.use('/api/todo',auth_MW,todo)
 
 // 引入message模块
-const message = require("./routers/message.js")
-server.use('/api/message',auth_MW,message)
+const mail = require("./routers/mail.js")
+server.use('/api/mail',auth_MW,mail)
 
 server.listen(9000,()=>{
     console.log('Http server launched: ','http://127.0.0.1:9000/')
