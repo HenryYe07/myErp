@@ -12,6 +12,35 @@ const serverKey = 'oooooiiiskskkkskks12348765'
 const chatModel = require('../db/Message/chatModel')
 const messageModel = require("../db/Message/messageModel")
 
+// 把发消息的向数据库写入部分弄成函数 要传入的还是那个对象
+async function sendMsg(messageObj,response){
+    messageModel.create(messageObj).then(()=>{
+        response.status(200).send("OK")
+        wss.clients.forEach((userObj)=>{
+            getMemlist_chatID(messageObj.chatID).then((res)=>{
+                for(const mem of res){
+                    if(userObj.userID == mem){
+                        userObj.send(JSON.stringify(messageObj))
+                    }
+                }
+            })
+        })
+    })
+    // 一旦有消息来了，就查一下在线列表
+}
+
+// 根据chatID获取人员列表函数
+async function getMemlist_chatID(chatID){
+    const result_find = await chatModel.findOne({_id:chatID})
+    if(result_find){
+        return result_find.member
+    }else{
+        return []
+    }
+    
+}
+
+
 // 发消息
 router.post('/',(request,response)=>{
     const messageObj = {
@@ -22,9 +51,7 @@ router.post('/',(request,response)=>{
         type: request.body.type,
         is_socketSent: false
     }
-    messageModel.create(messageObj).then(()=>{
-        response.status(200).send("OK")
-    })
+    sendMsg(messageObj,response)
     
 })
 // 撤回消息
@@ -107,9 +134,7 @@ router.post('/chat',(request,response)=>{
         type: "text",
 
         }
-        messageModel.create(messageObj).then(()=>{
-            response.status(200).send("OK")
-        })
+        sendMsg(messageObj,response)
 
     })
     
@@ -141,10 +166,7 @@ router.put('/chat',(request,response)=>{
         type: "text",
 
         }
-        messageModel.create(messageObj).then(()=>{
-            response.status(200).send("OK")
-        })
-
+        sendMsg(messageObj,response)
     })
     
 })
@@ -155,4 +177,41 @@ router.get('/chat',(request,response)=>{
         response.status(200).json(res)
     })
 })
+
+
+// 开启ws服务
+const WebSocket  = require('ws')
+const wss = new WebSocket.Server({port:9090})
+    wss.on('connection',(userObj,request)=>{
+        const token = request.headers.cookie
+            ?.split(';')
+            .find(item => item.trim().startsWith('token='))
+            ?.split('=')[1]
+
+        console.log(`有一个新用户上线了 ip: ${request.socket.remoteAddress},用户名：`)
+
+        jwt.verify(token,serverKey,(err,data)=>{
+            if(err){
+                console.log('错误位置1',err)
+                userObj.close()
+            }
+            else{
+                userModel.find({_id:data.id}).then((db_userinfo)=>{
+                    jwt.verify(token,serverKey,(err,data)=>{
+                    // 处理登陆/账户本身的异常
+                        if(err || !db_userinfo || data.tokenVersion != db_userinfo[0].tokenVersion){
+                            userObj.close()
+                            console.log("错误位置2",token)
+                        }
+                        if(data.tokenVersion == db_userinfo[0].tokenVersion){
+                            // let userID = data.id
+                            userObj.userID = String(data.id)
+                            // 现在是好的
+                    }
+                    })
+                })
+            }
+        })
+    })
+
 module.exports = router
