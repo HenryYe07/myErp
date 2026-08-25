@@ -55,6 +55,8 @@
 <style scoped>
     .mainOuter {
         display: flex;
+        backdrop-filter: blur(10px);
+        
     }
     .mainLeft{
         width: 230px;

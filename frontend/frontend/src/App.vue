@@ -22,6 +22,8 @@
 
     const router = useRouter()
     router.push('/login')
+
+
 </script>
 
 <style>

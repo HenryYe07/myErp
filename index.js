@@ -45,13 +45,12 @@ server.get('/',(request,response)=>{
 })
 
 // 引入todo模块
-const todo= require("./routers/todo.js")
+const todo = require("./routers/todo.js")
 server.use('/api/todo',auth_MW,todo)
 
-
-server.get('/testPermission',auth_MW,permission_Verify_MW("display.view"),(request,response)=>{
-    response.send("OK")
-})
+// 引入message模块
+const message = require("./routers/message.js")
+server.use('/api/message',auth_MW,message)
 
 server.listen(9000,()=>{
     console.log('Http server launched: ','http://127.0.0.1:9000/')
