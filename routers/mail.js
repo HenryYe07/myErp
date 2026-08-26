@@ -82,7 +82,7 @@ router.get("/list", async (request, response) => {
     const box = request.query.box || undefined
     const roll = request.query.roll || undefined
     const type = request.query.type || undefined
-    const is_read = request.query.is_read || undefined
+    const is_read = request.query.isread || undefined
 
     // 默认第 1 页
     const page = Math.max(parseInt(request.query.page) || 1, 1)
@@ -105,7 +105,7 @@ router.get("/list", async (request, response) => {
     if (
         box === "rcv" &&
         roll !== undefined &&
-        !["main", "copy"].includes(roll)
+        !["main", "copy","all"].includes(roll)
     ) {
         response.status(400).send("roll参数必须是main或copy")
         return
@@ -140,7 +140,7 @@ router.get("/list", async (request, response) => {
         }
 
         // 主送 / 抄送
-        if (roll !== undefined) {
+        if (roll !== undefined && roll !== "all") {
             receiverCondition.type = roll
         }
 
@@ -179,8 +179,19 @@ router.get("/list", async (request, response) => {
             .sort({ _id: -1 })
             .skip((page - 1) * count_perTme)
             .limit(count_perTme)
-            
+            .lean()
 
+
+        // 给每封邮件添加当前用户的已读状态
+        for (const index_mail in mailList) {
+            for(const index_rcv in mailList[index_mail].receivers){
+
+                if(mailList[index_mail].receivers[index_rcv].userID == request.userID){
+                    mailList[index_mail].I_isRead = mailList[index_mail].receivers[index_rcv].is_read
+                    break
+                }
+            }
+        }
         response.status(200).json(mailList)
 
     }
@@ -219,6 +230,26 @@ router.get("/", async (request, response) => {
             return
         }
 
+
+        // 如果还没读过，直接修改数据库
+        const receiver = mailObj.receivers.find((item) => {
+            return String(item.userID) === String(request.userID)
+        })
+        if (receiver && receiver.is_read === false) {
+            await mailModel.updateOne(
+                {
+                    _id: String(mailObj._id),
+                    "receivers.userID": request.userID
+                },
+                {
+                    $set: {
+                        "receivers.$.is_read": true
+                    }
+                }
+            )
+            // 同时修改当前返回的数据
+            receiver.is_read = true
+        }
         // 允许访问
         response.status(200).json(mailObj)
     }

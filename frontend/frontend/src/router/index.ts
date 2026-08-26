@@ -10,7 +10,7 @@ import adminPage from '@/views/workspace/adminPage.vue'
 import approvalPage from '@/views/workspace/approvalPage.vue'
 import displayPage from '@/views/workspace/displayPage.vue'
 import managementPage from '@/views/workspace/managementPage.vue'
-import messagePage from '@/views/workspace/messagePage.vue'
+import mailPage from '@/views/workspace/mailPage.vue'
 import orderPage from '@/views/workspace/orderPage.vue'
 import todoPage from '@/views/workspace/todoPage.vue'
 import welcomePage from '@/views/workspace/welcomePage.vue'
@@ -41,7 +41,7 @@ const router = createRouter({
             {path:'approval',component:approvalPage},
             {path:'display',component:displayPage},
             {path:'management',component:managementPage},
-            {path:'message',component:messagePage},
+            {path:'message',component:mailPage},
             {path:'order',component:orderPage},
             {
                 path:'todo',
