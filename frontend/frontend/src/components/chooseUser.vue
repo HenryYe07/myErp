@@ -1,7 +1,7 @@
 <template>
 
     <div class="outer">
-        
+
         <div class="addedMember">
             <span class="member" v-for="(item, index) in approvers" :key="index" @click="removeMem(item)">{{ item.username }}</span>
         </div>
@@ -28,7 +28,7 @@
 
     const approvers = ref([])
     const findingWords = ref("")
-    const foundUserData = ref("")  
+    const foundUserData = ref("")
     const findCard_vis = ref(false)
 
     const memList = defineModel()
@@ -69,7 +69,7 @@
         const index = approvers.value.findIndex(i=> i._id === item._id)
         if (index !== -1) {
             approvers.value.splice(index, 1)
-        }       
+        }
     }
 </script>
 
@@ -105,7 +105,7 @@
     width: 100%;
     overflow:initial;
     display: inline-block;
-    
+
 }
 
 .findMemIpt {
