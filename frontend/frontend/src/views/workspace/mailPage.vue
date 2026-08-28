@@ -13,6 +13,7 @@
     import {use_mailStore} from "@/stores/mailStore.ts";
     const mailStore = use_mailStore();
     import sendMail from '@/components/forMail/sendMail.vue'
+
 </script>
 <style scoped>
     .outer{

@@ -87,7 +87,7 @@
     margin: 10px;
     box-sizing: border-box;
     width: 98%;
-
+    height: auto;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 
 }

@@ -9,17 +9,14 @@
       <div class="chooseRcvs">
         <div class="left">
           <div class="tip">请选择主要收件人：</div>
-          <choose-user v-model="main_rcv"></choose-user>
+          <choose-user v-model="main_rcv" class="main-rcv"></choose-user>
         </div>
         <div class="right">
           <div class="tip">请选择抄送收件人：</div>
-          <choose-user v-model="copy_rcv"></choose-user>
+          <choose-user v-model="copy_rcv" class="copy-rcv"></choose-user>
         </div>
       </div>
-
-
-
-
+      <div class="edit">
 
       <!-- 工具栏 -->
       <Toolbar
@@ -38,6 +35,7 @@
         @onCreated="handleCreated"
         class="input-sq"
       />
+      </div>
     </div>
 
     <div class="endbar">
@@ -52,7 +50,7 @@
         </el-select>
       </div>
       <div class="right">
-        <el-button  class="send" plain type="success" >发送</el-button>
+        <el-button  class="send" plain type="success"  @click="sendMail">发送</el-button>
       </div>
 
     </div>
@@ -133,14 +131,34 @@ function default_page(){
 }
 
 import {onMounted} from "vue";
+import {postJSON} from "../../modules/fetch"
 onMounted(() => {
   default_page()
 })
+
+function sendMail(){
+
+    const sendingObj = {
+      title:title.value,
+      quoteMailID:"",
+      content:mailContent.value,
+      type:type.value,
+      mainRcvID:main_rcv.value.map((item)=>{return item._id}),
+      copyRcvID:copy_rcv.value.map((item)=>{return item._id}),
+      attachmentList:[]
+    }
+
+
+    postJSON("/api/mail",sendingObj)
+
+}
 </script>
 
 <style scoped>
     .outer {
-      padding: 0px 100px;
+        padding: 0px 100px;
+        height: calc(100vh - 70px);
+        overflow: scroll;
     }
     .sending_titile {
       text-align: center;
@@ -152,13 +170,21 @@ onMounted(() => {
       padding: 20px;
 
     }
-    .chooseRcvs .left {
-      float: left;
-      width: 50%;
+
+
+    .main-rcv{
+      height: auto;
+
+
     }
-    .chooseRcvs .right {
-      float: right;
-      width: 50%;
+    .copy-rcv{
+      height: auto;
+
+    }
+
+    .chooseRcvs{
+      display: block;
+      height: auto;
     }
 
     .input-sq :deep([data-slate-editor="true"]) {
@@ -197,5 +223,6 @@ onMounted(() => {
 
     .endbar .right>*{
       width: 300px;
+      margin-bottom: 400px;
     }
 </style>
